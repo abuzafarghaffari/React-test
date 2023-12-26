@@ -1,14 +1,14 @@
 
 import './App.css'
-//import Options from './Pages/entry/Options'
+import Options from './Pages/entry/Options'
 
 function App() {
   
 
   return (
     <>
-      {/* <Options optionType ="scoops" /> */}
-     <div>App</div>
+      <Options optionType ="scoops" />
+      <Options optionType ="toppings" />
     </>
   )
 }
