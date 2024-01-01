@@ -2,10 +2,10 @@
 import { http, HttpResponse } from 'msw';
  import {server} from '../../../mocks/server';
  import {expect} from 'vitest';
-import { render,screen } from "@testing-library/react";
+import { render,screen } from "../../../test-utils/testing-library-utils";
 import OrderEntry from "../OrderEntry";
 
-test.only("handles error for scoops and toppings routes",async ()=>{
+test("handles error for scoops and toppings routes",async ()=>{
     //to bypass defaut handler
 server.resetHandlers(
     http.get("http://localhost:3030/scoops",()=>{
@@ -23,6 +23,24 @@ const alerts = await screen.findAllByText(
 expect(alerts).toHaveLength(2)
 })
 
-test("my test 2",()=>{})
-
-test("my test 3",()=>{})
+test("disable order button if there are no scoops ordered", async () => {
+    const user = userEvent.setup();
+    render(<OrderEntry setOrderPhase={vi.fn()} />);
+  
+    // order button should be disabled at first, even before options load
+    const orderButton = screen.getByRole("button", { name: /order sundae/i });
+    expect(orderButton).toBeDisabled();
+  
+    // expect button to be enabled after adding scoop
+    const vanillaInput = await screen.findByRole("spinbutton", {
+      name: "Vanilla",
+    });
+    await user.clear(vanillaInput);
+    await user.type(vanillaInput, "1");
+    expect(orderButton).toBeEnabled();
+  
+    // expect button to be disabled again after removing scoop
+    await user.clear(vanillaInput);
+    await user.type(vanillaInput, "0");
+    expect(orderButton).toBeDisabled();
+  });

@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "../../../test-utils/testing-library-utils";
 import {expect} from 'vitest';
 import Options from "../Options";
 import '@testing-library/jest-dom';
